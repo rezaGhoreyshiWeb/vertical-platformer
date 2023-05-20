@@ -13,11 +13,11 @@ const scaledCanvas = {
 };
 
 // Collisions Block
-const collisionBlock = [];
+const floorCollisionBlocks = [];
 floorCollisions2D.forEach((row, y) => {
   row.forEach((symbol, x) => {
     if (symbol === 202) {
-      collisionBlock.push(
+      floorCollisionBlocks.push(
         new CollisionBlock({ position: { x: x * 16, y: y * 16 } })
       );
     }
@@ -35,7 +35,10 @@ platformCollisions2D.forEach((row, y) => {
   });
 });
 
-const player = new Player({ x: 0, y: 0 });
+const player = new Player({
+  position: { x: 100, y: 0 },
+  collisionBlocks: floorCollisionBlocks,
+});
 
 const keys = {
   d: {
@@ -51,6 +54,7 @@ const background = new Sprite({
   imageSrc: "./assets/background.png",
 });
 
+// main function for starting game
 function animate() {
   window.requestAnimationFrame(animate);
 
@@ -64,15 +68,13 @@ function animate() {
   c.translate(0, -background.image.height + scaledCanvas.height);
   background.update();
   //   collision block rendering
-  collisionBlock.forEach((collisionBlock) => {
+  floorCollisionBlocks.forEach((collisionBlock) => {
     collisionBlock.update();
   });
 
   platformCollisionBlocks.forEach((collisionBlock) => {
     collisionBlock.update();
   });
-
-  c.restore();
 
   //   Player
   player.update();
@@ -84,6 +86,10 @@ function animate() {
   } else if (keys.a.pressed) {
     player.velocity.x = -5;
   }
+
+  c.restore();
+
+  
 }
 
 animate();
@@ -98,7 +104,7 @@ window.addEventListener("keydown", (event) => {
       keys.a.pressed = true;
       break;
     case "w":
-      player.velocity.y = -20;
+      player.velocity.y = -8 ;
       break;
   }
 });
