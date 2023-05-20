@@ -98,7 +98,12 @@ const background = new Sprite({
   position: { x: 0, y: 0 },
   imageSrc: "./assets/background.png",
 });
-
+const camera = {
+  position: {
+    x: 0,
+    y: 0,
+  },
+};
 // main function for starting game
 function animate() {
   window.requestAnimationFrame(animate);
@@ -110,7 +115,10 @@ function animate() {
   //   setting the backgroud
   c.save();
   c.scale(4, 4);
-  c.translate(0, -background.image.height + scaledCanvas.height);
+  c.translate(
+    camera.position.x,
+    -background.image.height + scaledCanvas.height
+  );
   background.update();
   //   collision block rendering
   floorCollisionBlocks.forEach((collisionBlock) => {
@@ -121,6 +129,7 @@ function animate() {
     collisionBlock.update();
   });
 
+  player.checkForHorizontalCanvasCollision();
   //   Player
   player.update();
 
@@ -130,10 +139,12 @@ function animate() {
     player.switchSprite("Run");
     player.velocity.x = 2;
     player.lastDirection = "right";
+    player.shouldPanCameraToTheLeft(camera);
   } else if (keys.a.pressed) {
     player.switchSprite("RunLeft");
     player.velocity.x = -2;
     player.lastDirection = "left";
+    player.shouldPanCameraToTheRight(camera);
   } else if (player.velocity.y === 0) {
     if (player.lastDirection === "right") {
       player.switchSprite("Idle");
