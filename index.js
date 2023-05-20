@@ -1,6 +1,8 @@
+import CollisionBlock from "./src/CollisionBlock.js";
 import Player from "./src/Player.js";
 import Sprite from "./src/Sprite.js";
 import { c, canvas } from "./src/canvas.js";
+import { floorCollisions2D, platformCollisions2D } from "./src/data.js";
 
 canvas.width = 1024;
 canvas.height = 576;
@@ -9,6 +11,29 @@ const scaledCanvas = {
   width: canvas.width / 4,
   height: canvas.height / 4,
 };
+
+// Collisions Block
+const collisionBlock = [];
+floorCollisions2D.forEach((row, y) => {
+  row.forEach((symbol, x) => {
+    if (symbol === 202) {
+      collisionBlock.push(
+        new CollisionBlock({ position: { x: x * 16, y: y * 16 } })
+      );
+    }
+  });
+});
+
+const platformCollisionBlocks = [];
+platformCollisions2D.forEach((row, y) => {
+  row.forEach((symbol, x) => {
+    if (symbol === 202) {
+      platformCollisionBlocks.push(
+        new CollisionBlock({ position: { x: x * 16, y: y * 16 } })
+      );
+    }
+  });
+});
 
 const player = new Player({ x: 0, y: 0 });
 
@@ -38,6 +63,15 @@ function animate() {
   c.scale(4, 4);
   c.translate(0, -background.image.height + scaledCanvas.height);
   background.update();
+  //   collision block rendering
+  collisionBlock.forEach((collisionBlock) => {
+    collisionBlock.update();
+  });
+
+  platformCollisionBlocks.forEach((collisionBlock) => {
+    collisionBlock.update();
+  });
+
   c.restore();
 
   //   Player
