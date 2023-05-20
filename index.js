@@ -38,6 +38,8 @@ platformCollisions2D.forEach((row, y) => {
 const player = new Player({
   position: { x: 100, y: 0 },
   collisionBlocks: floorCollisionBlocks,
+  imageSrc: "./assets/warrior/Idle.png",
+  frameRate: 8,
 });
 
 const keys = {
@@ -88,8 +90,6 @@ function animate() {
   }
 
   c.restore();
-
-  
 }
 
 animate();
@@ -104,7 +104,7 @@ window.addEventListener("keydown", (event) => {
       keys.a.pressed = true;
       break;
     case "w":
-      player.velocity.y = -8 ;
+      player.velocity.y = -8;
       break;
   }
 });

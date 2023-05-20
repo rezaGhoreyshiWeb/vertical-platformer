@@ -1,26 +1,26 @@
+import Sprite from "./Sprite.js";
 import { c, canvas } from "./canvas.js";
 import { collision } from "./collision.js";
 
 const gravity = 0.5;
 
-export default class Player {
-  constructor({ position, collisionBlocks }) {
+export default class Player extends Sprite{
+  constructor({ position, collisionBlocks, imageSrc, frameRate, scale = 0.5}) {
+    super({ imageSrc,frameRate, scale})
     this.position = position;
     this.velocity = {
       x: 0,
       y: 1,
     };
-    this.height = 25;
-    this.width = 25;
+    
     this.collisionBlocks = collisionBlocks;
   }
 
-  draw() {
-    c.fillStyle = "red";
-    c.fillRect(this.position.x, this.position.y, this.width, this.height);
-  }
-
+ 
   update() {
+    this.updateFrames();
+    c.fillStyle = 'rgba(0,255,0,0.2)'
+    c.fillRect(this.position.x , this.position.y, this.width, this.height)
     this.draw();
     this.position.x += this.velocity.x;
     this.checkForHorizontalCollisions();
