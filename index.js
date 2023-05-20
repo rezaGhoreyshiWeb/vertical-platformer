@@ -29,7 +29,7 @@ platformCollisions2D.forEach((row, y) => {
   row.forEach((symbol, x) => {
     if (symbol === 202) {
       platformCollisionBlocks.push(
-        new CollisionBlock({ position: { x: x * 16, y: y * 16 } })
+        new CollisionBlock({ position: { x: x * 16, y: y * 16 }, height: 4 })
       );
     }
   });
@@ -38,6 +38,7 @@ platformCollisions2D.forEach((row, y) => {
 const player = new Player({
   position: { x: 100, y: 300 },
   collisionBlocks: floorCollisionBlocks,
+  platformCollisionBlocks: platformCollisionBlocks,
   imageSrc: "./assets/warrior/Idle.png",
   frameRate: 8,
   animations: {
@@ -170,7 +171,7 @@ window.addEventListener("keydown", (event) => {
       keys.a.pressed = true;
       break;
     case "w":
-      player.velocity.y = -8;
+      player.velocity.y = -4;
       break;
   }
 });
