@@ -103,29 +103,36 @@ export default class Player extends Sprite {
       camera.position.x -= this.velocity.x;
     }
   }
+  shouldPanCameraToTheDown(camera) {
+    if (this.camerabox.position.y + this.velocity.y <= 0) return;
+
+    if (this.camerabox.position.y <= Math.abs(camera.position.y)) {
+      camera.position.y -= this.velocity.y;
+    }
+  }
+  shouldPanCameraToTheUp(camera) {
+    if (
+      this.camerabox.position.y + this.camerabox.height + this.velocity.y >=
+      432
+    ) {
+      return;
+    }
+
+    const scaledCanvasHeight = canvas.height / 4;
+
+    if (
+      this.camerabox.position.y + this.camerabox.height >=
+      Math.abs(camera.position.y) + scaledCanvasHeight
+    ) {
+      camera.position.y -= this.velocity.y;
+    }
+  }
 
   update() {
     this.updateFrames();
     this.updateHitBox();
     this.updateCamerabox();
-    c.fillStyle = "rgba(0,0,255,0.2)";
-    c.fillRect(
-      this.camerabox.position.x,
-      this.camerabox.position.y,
-      this.camerabox.width,
-      this.camerabox.height
-    );
-
-    // c.fillStyle = "rgba(0,255,0,0.2)";
-    // c.fillRect(this.position.x, this.position.y, this.width, this.height);
-
-    // c.fillStyle = "rgba(255,0,0,0.2)";
-    // c.fillRect(
-    //   this.hitbox.position.x,
-    //   this.hitbox.position.y,
-    //   this.hitbox.width,
-    //   this.hitbox.height
-    // );
+   
 
     this.draw();
     this.position.x += this.velocity.x;

@@ -98,10 +98,12 @@ const background = new Sprite({
   position: { x: 0, y: 0 },
   imageSrc: "./assets/background.png",
 });
+
+const backgroundImageHeight = 432;
 const camera = {
   position: {
     x: 0,
-    y: 0,
+    y: -backgroundImageHeight + scaledCanvas.height,
   },
 };
 // main function for starting game
@@ -115,25 +117,22 @@ function animate() {
   //   setting the backgroud
   c.save();
   c.scale(4, 4);
-  c.translate(
-    camera.position.x,
-    -background.image.height + scaledCanvas.height
-  );
+  c.translate(camera.position.x, camera.position.y);
   background.update();
   //   collision block rendering
-  floorCollisionBlocks.forEach((collisionBlock) => {
-    collisionBlock.update();
-  });
+//   floorCollisionBlocks.forEach((collisionBlock) => {
+//     collisionBlock.update();
+//   });
 
-  platformCollisionBlocks.forEach((collisionBlock) => {
-    collisionBlock.update();
-  });
+//   platformCollisionBlocks.forEach((collisionBlock) => {
+//     collisionBlock.update();
+//   });
 
   player.checkForHorizontalCanvasCollision();
   //   Player
   player.update();
 
-  //   movement of player
+  //   movement x of player
   player.velocity.x = 0;
   if (keys.d.pressed) {
     player.switchSprite("Run");
@@ -153,13 +152,16 @@ function animate() {
     }
   }
 
+  //   movment Y of player
   if (player.velocity.y < 0) {
+    player.shouldPanCameraToTheDown(camera);
     if (player.lastDirection === "right") {
       player.switchSprite("Jump");
     } else {
       player.switchSprite("JumpLeft");
     }
   } else if (player.velocity.y > 0) {
+    player.shouldPanCameraToTheUp(camera);
     if (player.lastDirection === "right") {
       player.switchSprite("Fall");
     } else {
